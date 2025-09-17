@@ -1,1 +1,45 @@
+Gestión de productos:
+-API para crear, editar, eliminar y listar productos.
+-Gestión de atributos: nombre, descripción, precio, stock, fotos, compatibilidad, marca, modelo, etc.
+-Control de inventario y notificaciones de stock bajo.
 
+Gestión de pedidos:
+-Creación automática de pedido desde el carrito del cliente.
+-Almacenamiento del estado de cada pedido (pendiente, en preparación, enviado, entregado).
+-Generación de número de pedido y facturación.
+-Registro de fecha de compra, método de pago y dirección de envío.
+
+Gestión de pagos:
+-Integración con pasarelas de pago (PayPal, Bizum, tarjeta).
+-Validación de pagos exitosos y actualización de estado del pedido.
+-Registro de transacciones (monto, fecha, referencia, estado).
+-Seguridad de datos de pago (tokenización, no guardar tarjetas en el servidor).
+
+Gestión de usuarios:
+-Registro, login y logout seguro (autenticación por JWT o sesiones).
+-Roles de usuario: cliente / administrador.
+-Gestión de perfiles, direcciones y contraseñas.
+-Historial de compras vinculado a cada usuario.
+
+Notificaciones:
+-Envío de emails automáticos: confirmación de pedido, envío, recuperación de contraseña.
+-Sistema de notificaciones internas para administradores (nuevos pedidos, errores de pago, stock bajo).
+
+Panel de administración:
+-Autenticación para administradores.
+-CRUD de productos, categorías, usuarios y pedidos.
+-Gestión de promociones, cupones de descuento y banners.
+-Dashboard con métricas básicas (ventas totales, pedidos recientes, productos más vendidos).
+
+Infraestructura de datos:
+-Base de datos relacional (ej. MySQL ) para productos, usuarios, pedidos, pagos.
+-Almacenamiento de imágenes en servidor o en servicio externo (ej. S3).
+-API REST/GraphQL para servir datos al frontend.
+-Logs de actividad y errores para depuración.
+
+Seguridad backend:
+-Uso de HTTPS (SSL).
+-Validación y sanitización de todas las entradas de usuario.
+-Protección CSRF y XSS.
+-Control de acceso basado en roles.
+-Copias de seguridad automáticas de la base de datos.
