@@ -1,0 +1,23 @@
+ADR-001: Base de dades del projecte
+
+Context: Necessitem una base de dades flexible per a usuaris, productes i comandes.
+
+Decisió: Ús de MongoDB com a base de dades principal, executada amb Docker.
+
+Conseqüències:
+
+-Flexibilitat i escalabilitat.
+-Bona integració amb Node/Express.
+-Consultes complexes poden ser menys eficients.
+
+ADR-002: Estructura inicial del projecte
+
+Context: He de decidit si treballar amb un monorepo o amb repositoris separats.
+
+Decisió: Mantenir backend i frontend en repos separats.
+
+Conseqüències:
+
+-Clar separament de responsabilitats.
+-Reutilització més senzilla del backend en altres projectes.
+-Gestió de versions més complexa.
