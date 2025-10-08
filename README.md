@@ -30,3 +30,7 @@ Comanda – Producte (N..M): una comanda pot incloure molts productes i un produ
 Usuari – Carret (1..1): cada usuari té un sol carret actiu.
 
 Comanda – Pagament (1..1): cada comanda té un únic pagament associat.
+
+Creació Api:
+<img width="470" height="194" alt="image" src="https://github.com/user-attachments/assets/5755065c-8a83-45c6-a394-0e2b92b30e90" />
+
