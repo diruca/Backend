@@ -34,3 +34,21 @@ Comanda – Pagament (1..1): cada comanda té un únic pagament associat.
 Creació Api:
 <img width="470" height="194" alt="image" src="https://github.com/user-attachments/assets/5755065c-8a83-45c6-a394-0e2b92b30e90" />
 
+Sessió 5:
+
+El objectiu es tenir una estructura més definida separat en tres capes (controllers, routes, services)
+
+<img width="777" height="435" alt="image" src="https://github.com/user-attachments/assets/3f87f4fd-33fd-41ec-9d3c-4998a0b3db57" />
+
+Rutes: Defineix els endpoints (/api/products)
+
+Controladors: Maneja peticions HTTP (req/res)
+
+Serveis: Conté la lògica de negoci
+
+<img width="1451" height="303" alt="image" src="https://github.com/user-attachments/assets/c6caec9e-a4c5-4721-8d35-63aaff3696d8" />
+
+<img width="462" height="580" alt="image" src="https://github.com/user-attachments/assets/96fbd91f-b37e-4e19-a344-8e64bfc6e913" />
+
+
+
