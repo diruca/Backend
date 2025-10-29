@@ -76,6 +76,8 @@ I per eliminar el seguent
 
 <img width="1336" height="86" alt="image" src="https://github.com/user-attachments/assets/1afc74ad-3d18-44d3-a10a-12eeab16a9d6" />
 
+Una vegada fet productes també s'ha de fer usuari, comanda, pagaments
+
 
 
 
