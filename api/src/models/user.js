@@ -5,15 +5,14 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: [true, 'El nombre es obligatorio'],
         trim: true,
-        minlength: [2, 'El nombre debe tener al menos 2 caracteres'],
-        maxlength: [50, 'El nombre no puede exceder 50 caracteres']
+        minlength: [2, 'El nombre debe tener al menos 2 caracteres']
     },
     email: {
         type: String,
         required: [true, 'El email es obligatorio'],
         unique: true,
         lowercase: true,
-        match: [/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/, 'Por favor ingresa un email válido']
+        match: [/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/, 'Email inválido']
     },
     password: {
         type: String,
@@ -25,17 +24,19 @@ const userSchema = new mongoose.Schema({
         enum: ['customer', 'admin'],
         default: 'customer'
     },
+    address: {
+        street: String,
+        city: String,
+        postalCode: String,
+        country: String
+    },
+    phone: String,
     isActive: {
         type: Boolean,
         default: true
-    },
-    createdAt: {
-        type: Date,
-        default: Date.now
     }
+}, {
+    timestamps: true
 });
-
-// Índex para mejorar búsquedas por email
-userSchema.index({ email: 1 });
 
 module.exports = mongoose.model('User', userSchema);

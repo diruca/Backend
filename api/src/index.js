@@ -7,6 +7,9 @@ const connectDB = require('./config/db');
 
 // Importa les rutes de productes
 const productRoutes = require('./routes/productRoutes');
+const userRoutes = require('./routes/userRoutes');
+const orderRoutes = require('./routes/orderRoutes');
+const paymentRoutes = require('./routes/paymentRoutes');
 
 // Inicialitza l'app d'Express
 const app = express();
@@ -27,11 +30,21 @@ app.get('/test', (req, res) => {
   res.json({ missatge: 'El backend de Node.js funciona correctament' });
 });
 
-// Registra les rutes de productes
+// ✅ REGISTRA TODAS LAS RUTAS (FALTABAN ESTAS)
 app.use('/api/products', productRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/orders', orderRoutes);
+app.use('/api/payments', paymentRoutes);
 
 // Configura el port (agafa el del .env o 3000 per defecte)
 const PORT = process.env.PORT || 3000;
 
 // Inicia el servidor
-app.listen(PORT, () => console.log(`Servidor escoltant al port ${PORT}`));
+app.listen(PORT, () => {
+  console.log(`Servidor escoltant al port ${PORT}`);
+  console.log('Endpoints disponibles:');
+  console.log('  Products:  http://localhost:3000/api/products');
+  console.log('  Users:     http://localhost:3000/api/users');
+  console.log('  Orders:    http://localhost:3000/api/orders');
+  console.log('  Payments:  http://localhost:3000/api/payments');
+});
