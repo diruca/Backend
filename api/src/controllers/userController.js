@@ -54,10 +54,32 @@ const deleteUser = async (req, res) => {
     }
 };
 
+const register = async (req, res) => {
+    try {
+        const { name, email, password } = req.body;
+        const user = await userService.registerUser(name, email, password);
+        res.status(201).json({ status: 'success', data: user });
+    } catch (error) {
+        res.status(400).json({ status: 'error', message: error.message });
+    }
+};
+
+const login = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        const token = await userService.loginUser(email, password);
+        res.status(200).json({ status: 'success', token });
+    } catch (error) {
+        res.status(401).json({ status: 'error', message: error.message });
+    }
+};
+
 module.exports = {
     createUser,
     getAllUsers,
     getUserById,
     updateUser,
-    deleteUser
+    deleteUser,
+    register,
+    login
 };
