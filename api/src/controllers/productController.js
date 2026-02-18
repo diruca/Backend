@@ -13,7 +13,7 @@ const createProduct = async (req, res) => {
 // READ - Obtener todos los productos
 const getAllProducts = async (req, res) => {
     try {
-        const products = await productService.getAllProducts();
+        const products = await productService.getAllProducts(req.query);
         res.status(200).json({ status: 'success', data: products });
     } catch (error) {
         res.status(500).json({ status: 'error', message: error.message });

@@ -1,45 +1,50 @@
-// Carrega les variables d'entorn del fitxer .env
 require('dotenv').config();
 
-// Importa les llibreries necessàries
 const express = require('express');
 const connectDB = require('./config/db');
 
-// Importa les rutes de productes
 const productRoutes = require('./routes/productRoutes');
 const userRoutes = require('./routes/userRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
+const cartRoutes = require('./routes/cartRoutes');
 
-// Inicialitza l'app d'Express
 const app = express();
 
-// Permet que el servidor entengui dades en format JSON
+// Middleware CORS manual per evitar problemes amb el frontend
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'http://localhost:5173');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+  // Respondre immediatament a la petició preflight (OPTIONS)
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+  next();
+});
+
 app.use(express.json());
 
-// Connexió amb MongoDB
 connectDB();
 
-// Ruta base de prova
 app.get('/', (req, res) => {
   res.send('API Ecommerce en marxa');
 });
 
-// Exemple de ruta de test per veure que tot funciona
 app.get('/test', (req, res) => {
   res.json({ missatge: 'El backend de Node.js funciona correctament' });
 });
 
-// ✅ REGISTRA TODAS LAS RUTAS (FALTABAN ESTAS)
+
 app.use('/api/products', productRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/payments', paymentRoutes);
+app.use('/api/cart', cartRoutes);
 
-// Configura el port (agafa el del .env o 3000 per defecte)
 const PORT = process.env.PORT || 3000;
 
-// Inicia el servidor
 app.listen(PORT, () => {
   console.log(`Servidor escoltant al port ${PORT}`);
   console.log('Endpoints disponibles:');
