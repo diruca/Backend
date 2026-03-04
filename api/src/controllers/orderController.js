@@ -1,8 +1,13 @@
 const orderService = require('../services/orderService');
+const cartService = require('../services/cartService');
 
 const createOrder = async (req, res) => {
     try {
         const order = await orderService.createOrder(req.body);
+        // Clear the cart after successful order creation
+        if (req.body.user) {
+            await cartService.clearCart(req.body.user);
+        }
         res.status(201).json({ status: 'success', data: order });
     } catch (error) {
         res.status(400).json({ status: 'error', message: error.message });
