@@ -19,10 +19,10 @@ const getAllProducts = async (filters = {}) => {
     }
 
     // Filtre per rang de preus
-    if (filters.minPrice || filters.maxPrice) {
+    if ((filters.minPrice && filters.minPrice !== '') || (filters.maxPrice && filters.maxPrice !== '')) {
         query.price = {};
-        if (filters.minPrice) query.price.$gte = Number(filters.minPrice);
-        if (filters.maxPrice) query.price.$lte = Number(filters.maxPrice);
+        if (filters.minPrice && filters.minPrice !== '') query.price.$gte = Number(filters.minPrice);
+        if (filters.maxPrice && filters.maxPrice !== '') query.price.$lte = Number(filters.maxPrice);
     }
 
     // Filtre per característiques (features)
