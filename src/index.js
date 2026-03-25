@@ -8,6 +8,10 @@ const userRoutes = require('./routes/userRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
 const cartRoutes = require('./routes/cartRoutes');
+const authRoutes = require('./routes/authRoutes');
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./docs/swagger');
+
 
 const app = express();
 
@@ -42,6 +46,11 @@ app.use('/api/users', userRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/cart', cartRoutes);
+app.use('/api/auth', authRoutes);
+
+// Documentació de l'API amb Swagger
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
 
 const PORT = process.env.PORT || 3000;
 
@@ -52,4 +61,5 @@ app.listen(PORT, () => {
   console.log('  Users:     http://localhost:3000/api/users');
   console.log('  Orders:    http://localhost:3000/api/orders');
   console.log('  Payments:  http://localhost:3000/api/payments');
+  console.log('  Auth:      http://localhost:3000/api/auth');
 });

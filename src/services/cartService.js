@@ -23,14 +23,16 @@ const addItemToCart = async (userId, productId, quantity) => {
         cart.items.push({ product: productId, quantity });
     }
 
-    return await cart.save();
+    await cart.save();
+    return await Cart.findById(cart._id).populate('items.product');
 };
 
 const removeItemFromCart = async (userId, productId) => {
     const cart = await Cart.findOne({ user: userId });
     if (cart) {
         cart.items = cart.items.filter(item => item.product.toString() !== productId);
-        return await cart.save();
+        await cart.save();
+        return await Cart.findById(cart._id).populate('items.product');
     }
     return null;
 };
@@ -39,7 +41,8 @@ const clearCart = async (userId) => {
     const cart = await Cart.findOne({ user: userId });
     if (cart) {
         cart.items = [];
-        return await cart.save();
+        await cart.save();
+        return await Cart.findById(cart._id).populate('items.product');
     }
     return null;
 };

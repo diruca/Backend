@@ -1,8 +1,15 @@
 const orderService = require('../services/orderService');
+const cartService = require('../services/cartService');
 
 const createOrder = async (req, res) => {
     try {
-        const order = await orderService.createOrder(req.body);
+        // Set the user ID from the authenticated user
+        const orderData = { ...req.body, user: req.user._id };
+        const order = await orderService.createOrder(orderData);
+        
+        // Clear the cart after successful order creation
+        await cartService.clearCart(req.user._id);
+
         res.status(201).json({ status: 'success', data: order });
     } catch (error) {
         res.status(400).json({ status: 'error', message: error.message });
@@ -32,7 +39,8 @@ const getOrderById = async (req, res) => {
 
 const getOrdersByUser = async (req, res) => {
     try {
-        const orders = await orderService.getOrdersByUser(req.params.userId);
+        // Use req.user._id from authMiddleware
+        const orders = await orderService.getOrdersByUser(req.user._id);
         res.status(200).json({ status: 'success', data: orders });
     } catch (error) {
         res.status(500).json({ status: 'error', message: error.message });
