@@ -9,6 +9,7 @@ const orderRoutes = require('./routes/orderRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
 const cartRoutes = require('./routes/cartRoutes');
 const authRoutes = require('./routes/authRoutes');
+const checkoutRoutes = require('./routes/checkoutRoutes');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./docs/swagger');
 
@@ -19,7 +20,7 @@ const app = express();
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', 'http://localhost:5173');
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, stripe-signature'); // Afegit stripe-signature
 
   // Respondre immediatament a la petició preflight (OPTIONS)
   if (req.method === 'OPTIONS') {
@@ -27,6 +28,11 @@ app.use((req, res, next) => {
   }
   next();
 });
+
+// Rutes que necessiten body raw (com Webhooks de Stripe) han d'anar ABANS d'express.json()
+// O configurar express.json() per saltar-se algunes rutes. 
+// Aquí usarem la ruta de checkout específica que ja té el seu propi parser.
+app.use('/api/checkout', checkoutRoutes);
 
 app.use(express.json());
 
@@ -47,6 +53,7 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/auth', authRoutes);
+
 
 // Documentació de l'API amb Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));

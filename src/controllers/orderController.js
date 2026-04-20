@@ -3,11 +3,9 @@ const cartService = require('../services/cartService');
 
 const createOrder = async (req, res) => {
     try {
-        // Set the user ID from the authenticated user
         const orderData = { ...req.body, user: req.user._id };
         const order = await orderService.createOrder(orderData);
-        
-        // Clear the cart after successful order creation
+
         await cartService.clearCart(req.user._id);
 
         res.status(201).json({ status: 'success', data: order });
