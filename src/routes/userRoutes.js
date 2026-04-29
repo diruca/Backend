@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController');
+const authMiddleware = require('../middleware/authMiddleware');
+const roleMiddleware = require('../middleware/roleMiddleware');
 
 //RUTES D'AUTENTICACIÓ
 /**
@@ -49,7 +51,7 @@ router.post('/login', userController.login);
  *       201:
  *         description: Usuari creat
  */
-router.post('/', userController.createUser);
+router.post('/', authMiddleware, roleMiddleware('admin'), userController.createUser);
 
 /**
  * @swagger
@@ -69,7 +71,7 @@ router.post('/', userController.createUser);
  *               items:
  *                 $ref: '#/components/schemas/User'
  */
-router.get('/', userController.getAllUsers);
+router.get('/', authMiddleware, roleMiddleware('admin'), userController.getAllUsers);
 
 /**
  * @swagger
@@ -89,7 +91,7 @@ router.get('/', userController.getAllUsers);
  *       404:
  *         description: Usuari no trobat
  */
-router.get('/:id', userController.getUserById);
+router.get('/:id', authMiddleware, userController.getUserById);
 
 /**
  * @swagger
@@ -113,7 +115,7 @@ router.get('/:id', userController.getUserById);
  *       200:
  *         description: Usuari actualitzat
  */
-router.put('/:id', userController.updateUser);
+router.put('/:id', authMiddleware, roleMiddleware('admin'), userController.updateUser);
 
 /**
  * @swagger
@@ -131,6 +133,6 @@ router.put('/:id', userController.updateUser);
  *       200:
  *         description: Usuari eliminat
  */
-router.delete('/:id', userController.deleteUser);
+router.delete('/:id', authMiddleware, roleMiddleware('admin'), userController.deleteUser);
 
 module.exports = router;

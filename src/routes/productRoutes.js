@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const productController = require('../controllers/productController');
+const authMiddleware = require('../middleware/authMiddleware');
+const roleMiddleware = require('../middleware/roleMiddleware');
 
 // CRUD completo para productos
 /**
@@ -21,7 +23,7 @@ const productController = require('../controllers/productController');
  *       201:
  *         description: Producte creat
  */
-router.post('/', productController.createProduct);
+router.post('/', authMiddleware, roleMiddleware('admin'), productController.createProduct);
 
 /**
  * @swagger
@@ -77,7 +79,7 @@ router.get('/:id', productController.getProductById);
  *       200:
  *         description: Producte actualitzat
  */
-router.put('/:id', productController.updateProduct);
+router.put('/:id', authMiddleware, roleMiddleware('admin'), productController.updateProduct);
 
 /**
  * @swagger
@@ -97,6 +99,6 @@ router.put('/:id', productController.updateProduct);
  *       200:
  *         description: Producte eliminat
  */
-router.delete('/:id', productController.deleteProduct);
+router.delete('/:id', authMiddleware, roleMiddleware('admin'), productController.deleteProduct);
 
 module.exports = router;

@@ -19,7 +19,7 @@ const app = express();
 // Middleware CORS manual per evitar problemes amb el frontend
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', 'http://localhost:5173');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, stripe-signature'); // Afegit stripe-signature
 
   // Respondre immediatament a la petició preflight (OPTIONS)

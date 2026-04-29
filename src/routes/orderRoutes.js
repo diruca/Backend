@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const orderController = require('../controllers/orderController');
 const authMiddleware = require('../middleware/authMiddleware');
+const roleMiddleware = require('../middleware/roleMiddleware');
 
 /**
  * @swagger
@@ -29,7 +30,7 @@ router.post('/', authMiddleware, orderController.createOrder);
  *       200:
  *         description: Llista de comandes
  */
-router.get('/', authMiddleware, orderController.getAllOrders);
+router.get('/', authMiddleware, roleMiddleware('admin'), orderController.getAllOrders);
 
 /**
  * @swagger
@@ -44,6 +45,20 @@ router.get('/', authMiddleware, orderController.getAllOrders);
  *         description: Llista de comandes de l'usuari
  */
 router.get('/my-orders', authMiddleware, orderController.getOrdersByUser);
+
+/**
+ * @swagger
+ * /api/orders/stats:
+ *   get:
+ *     summary: Obté estadístiques de comandes (Només Admin)
+ *     tags: [Orders]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Estadístiques de comandes
+ */
+router.get('/stats', authMiddleware, roleMiddleware('admin'), orderController.getOrderStats);
 
 /**
  * @swagger
@@ -93,6 +108,6 @@ router.get('/:id', authMiddleware, orderController.getOrderById);
  *       200:
  *         description: Estat actualitzat
  */
-router.patch('/:id/status', authMiddleware, orderController.updateOrderStatus);
+router.patch('/:id/status', authMiddleware, roleMiddleware('admin'), orderController.updateOrderStatus);
 
 module.exports = router;
