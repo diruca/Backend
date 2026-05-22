@@ -1,0 +1,21 @@
+services:
+  mongodb_contenedor:
+    image: mongo
+    restart: always
+    container_name: mongo-backend
+    ports:
+      - 27018:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - mongo_network
+
+volumes:
+  mongo_data:
+
+networks:
+  mongo_network:
+    driver: bridge

@@ -4,8 +4,10 @@ const productService = require('../services/productService');
 const createProduct = async (req, res) => {
     try {
         const product = await productService.createProduct(req.body);
+        req.log.info({ productId: product._id }, 'Product created successfully');
         res.status(201).json({ status: 'success', data: product });
     } catch (error) {
+        req.log.error({ error: error.message }, 'Error creating product');
         res.status(400).json({ status: 'error', message: error.message });
     }
 };
@@ -13,9 +15,17 @@ const createProduct = async (req, res) => {
 // READ - Obtener todos los productos
 const getAllProducts = async (req, res) => {
     try {
+        req.log.info({
+            query: req.query
+        }, 'Getting product list');
+
         const products = await productService.getAllProducts(req.query);
         res.status(200).json({ status: 'success', data: products });
     } catch (error) {
+        req.log.error({
+            query: req.query,
+            error: error.message
+        }, 'Error getting products');
         res.status(500).json({ status: 'error', message: error.message });
     }
 };
@@ -53,11 +63,14 @@ const deleteProduct = async (req, res) => {
         if (!product) {
             return res.status(404).json({ status: 'error', message: 'Producto no encontrado' });
         }
+        req.log.info({ productId: req.params.id }, 'Product deleted successfully');
         res.status(200).json({ status: 'success', message: 'Producto eliminado' });
     } catch (error) {
+        req.log.error({ productId: req.params.id, error: error.message }, 'Error deleting product');
         res.status(500).json({ status: 'error', message: error.message });
     }
 };
+
 
 module.exports = {
     createProduct,

@@ -2,11 +2,112 @@ const express = require('express');
 const router = express.Router();
 const orderController = require('../controllers/orderController');
 const authMiddleware = require('../middleware/authMiddleware');
+const roleMiddleware = require('../middleware/roleMiddleware');
 
-router.post('/', authMiddleware, orderController.createOrder);                 // CREATE
-router.get('/', authMiddleware, orderController.getAllOrders);                 // READ ALL
-router.get('/:id', authMiddleware, orderController.getOrderById);              // READ ONE
-router.get('/my-orders', authMiddleware, orderController.getOrdersByUser);     // ORDERS BY LOGGED USER
-router.patch('/:id/status', authMiddleware, orderController.updateOrderStatus); // UPDATE STATUS
+/**
+ * @swagger
+ * /api/orders:
+ *   post:
+ *     summary: Crea una nova comanda
+ *     tags: [Orders]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       201:
+ *         description: Comanda creada
+ */
+router.post('/', authMiddleware, orderController.createOrder);
+
+/**
+ * @swagger
+ * /api/orders:
+ *   get:
+ *     summary: Obté totes les comandes
+ *     tags: [Orders]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Llista de comandes
+ */
+router.get('/', authMiddleware, roleMiddleware('admin'), orderController.getAllOrders);
+
+/**
+ * @swagger
+ * /api/orders/my-orders:
+ *   get:
+ *     summary: Obté les comandes de l'usuari autenticat
+ *     tags: [Orders]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Llista de comandes de l'usuari
+ */
+router.get('/my-orders', authMiddleware, orderController.getOrdersByUser);
+
+/**
+ * @swagger
+ * /api/orders/stats:
+ *   get:
+ *     summary: Obté estadístiques de comandes (Només Admin)
+ *     tags: [Orders]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Estadístiques de comandes
+ */
+router.get('/stats', authMiddleware, roleMiddleware('admin'), orderController.getOrderStats);
+
+/**
+ * @swagger
+ * /api/orders/{id}:
+ *   get:
+ *     summary: Obté una comanda per ID
+ *     tags: [Orders]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Dades de la comanda
+ */
+router.get('/:id', authMiddleware, orderController.getOrderById);
+
+/**
+ * @swagger
+ * /api/orders/{id}/status:
+ *   patch:
+ *     summary: Actualitza l'estat d'una comanda
+ *     tags: [Orders]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               status:
+ *                 type: string
+ *                 enum: [pending, completed, cancelled]
+ *     responses:
+ *       200:
+ *         description: Estat actualitzat
+ */
+router.patch('/:id/status', authMiddleware, roleMiddleware('admin'), orderController.updateOrderStatus);
 
 module.exports = router;

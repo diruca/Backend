@@ -3,11 +3,9 @@ const cartService = require('../services/cartService');
 
 const createOrder = async (req, res) => {
     try {
-        // Set the user ID from the authenticated user
         const orderData = { ...req.body, user: req.user._id };
         const order = await orderService.createOrder(orderData);
-        
-        // Clear the cart after successful order creation
+
         await cartService.clearCart(req.user._id);
 
         res.status(201).json({ status: 'success', data: order });
@@ -59,10 +57,20 @@ const updateOrderStatus = async (req, res) => {
     }
 };
 
+const getOrderStats = async (req, res) => {
+    try {
+        const stats = await orderService.getOrderStats();
+        res.status(200).json({ status: 'success', data: stats });
+    } catch (error) {
+        res.status(500).json({ status: 'error', message: error.message });
+    }
+};
+
 module.exports = {
     createOrder,
     getAllOrders,
     getOrderById,
     getOrdersByUser,
-    updateOrderStatus
+    updateOrderStatus,
+    getOrderStats
 };

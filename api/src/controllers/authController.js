@@ -1,4 +1,4 @@
-const User = require('../models/User');
+const User = require('../models/user');
 const authService = require('../services/authService');
 const bcrypt = require('bcryptjs');
 
@@ -39,12 +39,14 @@ const login = async (req, res) => {
         // 1. Buscar usuari per email
         const user = await User.findOne({ email });
         if (!user) {
+            req.log.warn({ email }, 'Invalid login attempt');
             return res.status(401).json({ status: 'error', message: 'Credencials incorrectes' });
         }
 
         // 2. Comparar contrasenya amb bcrypt
         const isMatch = await user.comparePassword(password);
         if (!isMatch) {
+            req.log.warn({ email }, 'Invalid login attempt');
             return res.status(401).json({ status: 'error', message: 'Credencials incorrectes' });
         }
 
@@ -57,6 +59,11 @@ const login = async (req, res) => {
         // 5. Guardar refresh token a MongoDB
         user.refreshToken = refreshToken;
         await user.save();
+
+        req.log.info({
+            userId: user._id,
+            email: user.email
+        }, 'User logged in successfully');
 
         res.status(200).json({
             status: 'success',
@@ -113,6 +120,10 @@ const logout = async (req, res) => {
             user.refreshToken = null;
             await user.save();
         }
+
+        req.log.info({
+            userId: req.user._id
+        }, 'User logged out');
 
         res.status(200).json({ status: 'success', message: 'Sessió tancada correctament' });
     } catch (error) {
