@@ -27,13 +27,15 @@ const createCheckoutSession = async (req, res) => {
             quantity: item.quantity,
         }));
 
+        const frontendUrl = process.env.FRONTEND_URL || req.get('origin') || 'http://localhost:5173';
+
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ['card'],
             line_items,
             mode: 'payment',
             client_reference_id: orderId,
-            success_url: `${process.env.FRONTEND_URL || 'http://localhost:5173'}/checkout/success`,
-            cancel_url: `${process.env.FRONTEND_URL || 'http://localhost:5173'}/checkout/cancel`,
+            success_url: `${frontendUrl}/checkout/success`,
+            cancel_url: `${frontendUrl}/checkout/cancel`,
             metadata: {
                 orderId: orderId.toString()
             }

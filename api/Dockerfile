@@ -6,6 +6,7 @@ COPY . .
 
 FROM node:20-alpine AS runner
 WORKDIR /app
+ENV NODE_ENV=production
 COPY --from=build /app/package*.json ./
 COPY --from=build /app/src ./src
 
